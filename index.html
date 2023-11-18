@@ -14,12 +14,13 @@
   <script type="module">
     import BView from "./bview.js";
 
+    BView.debug = true;
     BView.start();
 
     class SourceCode extends BView{
       preinitialize(){
         this.el.innerHTML = `
-          <div class="row" style='text-shadow:none;'>
+          <div class="row text-dark pt-2" style='text-shadow:none; background:#eee;'>
             <div class="col-md-6">
               <h4>HTML</h4>
               <pre><code class="language-html">${_.escape(this.q('.html').value)}</code></pre>
@@ -28,10 +29,12 @@
               <h4>JavaScript</h4>
               <pre><code class="language-javascript">${_.escape(this.q('script').innerHTML)}</code></pre>
             </div>
+          </div>
+          <div class='row' style='text-shadow:none;'>
             ${
               this.el.dataset.result != 'false' ?
               `
-                <div class="col-md-12 my-2">
+                <div class="col-md-12 p-0 my-2">
                   <h4>Result</h4>
                   <div class='p-5 bg-white text-black'>
                     ${this.q('.html').value}
@@ -63,7 +66,7 @@
     </header>
   
     <main class="px-3 text-center" style="margin:200px 0;">
-      <h1 class="mb-3" style="font-size: 50px;">A <a href="https://backbonejs.org/#View" class="text-white">BackboneJS View</a> implementation</h1>
+      <h1 class="mb-3">A <a href="https://backbonejs.org/#View" class="text-white">BackboneJS View</a> implementation</h1>
       <p class="lead">
         BView implements BackboneJS View, and nothing else.
         <br/>
@@ -83,24 +86,6 @@
   <div class="message">
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </textarea>
 <script type="module">import BView from "./bview.js";
 
@@ -174,9 +159,6 @@ BView.addView(Hello);
   BView.debug = true; // If you want debug
   BView.start(); // Starts observer to instantiate views
 </script>
-
-
-
 </textarea>
 <script type="module">// For using in a js file
 
@@ -192,10 +174,6 @@ BView.addView(ExampleView);
 // Add these below lines once anywhere in your code
 // BView.debug = true; // If you want debug
 // BView.start(); // Starts observer to instantiate views
-
-
-
-
 </script>
 </div>
 
@@ -214,39 +192,6 @@ BView.addView(ExampleView);
   </form>
   <div class="list"></div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </textarea>
 <script type="module">import BView from './bview.js';
 
@@ -298,39 +243,6 @@ BView.addView(RenderExample);
 <div data-view="CounterView"></div>
 <div data-view="CounterView"></div>
 <div data-view="CounterView"></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </textarea>
 <script type="module">import BView from './bview.js';
 
@@ -360,11 +272,11 @@ class CounterView extends BView{
 
   render(){
     this.el.innerHTML = `
-      <p>
+      <div>
         <button class="increment">Increment</button>
         <button class="decrement">Decrement</button>
         <span class="output">${this.value}</span>
-      </p>
+      </div>
     `;
   }
 }
@@ -383,53 +295,11 @@ BView.addView(CounterView)
 <div data-view="CounterView2"></div>
 <div data-view="CounterView2"></div>
 <div data-view="CounterView2"></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </textarea>
 <script type="module">import BView from './bview.js';
 
 class CounterView2 extends BView{
-  preinitialize(el){
-    this.el = el;
-
+  preinitialize(){
     this.events = {
       'click .increment': 'increment',
       'click .decrement': 'decrement'
@@ -468,6 +338,92 @@ class CounterView2 extends BView{
 }
 
 BView.addView(CounterView2)
+</script>
+</div>
+
+
+
+
+<h3 class="mt-5 mb-3 pt-5 border-top">View in a View</h3>
+<div data-view="SourceCode">
+<textarea class="html">
+<div data-view="ViewInView">
+  <a href="#add">Add Counter</a>
+  <p>
+    Views are auto instantiated as they are added to DOM.
+    <br/>
+    Instances are auto destroyed when removed from DOM.
+    <br/>
+    Check in console for debug logs.
+  </p>
+</div>
+</textarea>
+<script type="module">import BView from './bview.js';
+
+class ViewInView extends BView{
+  preinitialize(){
+    this.events = {
+      'click a[href="#add"]': 'addCounter',
+      'click a[href="#remove"]': 'removeCounter',
+    };
+  }
+
+  addCounter(e){
+    e.preventDefault();
+
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <div data-view='CounterView'></div>
+      <a href='#remove'>Remove</a>
+      <br/><br/>
+    `;
+    this.el.appendChild(div);
+  }
+
+  removeCounter(e){
+    e.preventDefault();
+
+    this.el.removeChild(e.target.parentElement);
+  }
+}
+
+BView.addView(ViewInView);
+</script>
+</div>
+
+
+<h3 class="mt-5 mb-3 pt-5 border-top">Paint</h3>
+<div data-view="SourceCode">
+<textarea class="html">
+<!-- Move your mouse around to draw -->
+<canvas data-view="Paint" width="500" height="500" style="border:1px solid #000;"></canvas>
+</textarea>
+<script type="module">import BView from './bview.js';
+
+class Paint extends BView{
+  preinitialize(){
+    this.events = {
+      'mousemove': 'onMouseMove'
+    };
+
+    this.drawing_context = this.el.getContext("2d");
+
+    this.prev_x = 0;
+    this.prev_y = 0;
+  }
+
+  onMouseMove(e){
+    this.drawing_context.beginPath();
+    this.drawing_context.moveTo(this.prev_x, this.prev_y);
+    this.drawing_context.lineTo(e.offsetX, e.offsetY);
+    this.drawing_context.stroke();
+
+    this.prev_x = e.offsetX;
+    this.prev_y = e.offsetY;
+  }
+}
+
+BView.addView(Paint);
 </script>
 </div>
 
