@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BView</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/twbs/bootstrap@gh-pages/docs/5.3/examples/cover/cover.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+
+  <script type="module">
+    import BView from "./bview.js";
+
+    BView.start();
+
+    class SourceCode extends BView{
+      preinitialize(){
+        this.el.innerHTML = `
+          <div class="row" style='text-shadow:none;'>
+            <div class="col-md-6">
+              <h4>HTML</h4>
+              <pre><code class="language-html">${_.escape(this.q('.html').value)}</code></pre>
+            </div>
+            <div class="col-md-6">
+              <h4>JavaScript</h4>
+              <pre><code class="language-javascript">${_.escape(this.q('script').innerHTML)}</code></pre>
+            </div>
+            ${
+              this.el.dataset.result != 'false' ?
+              `
+                <div class="col-md-12 my-2">
+                  <h4>Result</h4>
+                  <div class='p-5 bg-white text-black'>
+                    ${this.q('.html').value}
+                  </div>
+                </div>
+              ` : 
+              ''
+            }
+          </div>
+        `;
+
+        hljs.highlightAll();
+      }
+    }
+
+    BView.addView(SourceCode);
+  </script>
+</head>
+<body class="d-flex h-100 text-bg-dark" style="background-color: #093b59 !important;">
+  <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="mb-auto">
+      <div>
+        <h3 class="float-md-start mb-0 text-white">BView</h3>
+        <nav class="nav nav-masthead justify-content-center float-md-end">
+          <a class="nav-link fw-bold py-1 px-0 active" aria-current="page" href="#">Home</a>
+          <a class="nav-link fw-bold py-1 px-0" href="https://github.com/splendidexponent/bview">GitHub</a>
+        </nav>
+      </div>
+    </header>
+  
+    <main class="px-3 text-center" style="margin:200px 0;">
+      <h1 class="mb-3" style="font-size: 50px;">A <a href="https://backbonejs.org/#View" class="text-white">BackboneJS View</a> implementation</h1>
+      <p class="lead">
+        BView implements BackboneJS View, and nothing else.
+        <br/>
+        One <em>JavaScript class</em> scopes to one <span class="text-secondary">(or many)</span> <em>HTML element</em>.
+      </p>
+    </main>
+
+<div data-view="SourceCode">
+<textarea class="html">
+<!-- Just add data-view="ClassName" to your element -->
+
+<div data-view="Hello">
+  <form>
+    <input type="text" class="name" placeholder="Enter Name" />
+    <button>Go</button>
+  </form>
+  <div class="message">
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</textarea>
+<script type="module">import BView from "./bview.js";
+
+class Hello extends BView{
+  preinitialize(){
+    // Define events within el
+    this.events = {
+      'submit form': 'sayHi'
+    }
+
+    // Predefined selectors within el
+    this.els = {
+      'name': '.name', // Access using this.name_el
+      'message': '.message' // Access using this.message_el
+    }
+  }
+
+  sayHi(e){
+    e.preventDefault();
+
+    // Access predefined selectors
+    this.message_el.innerText = `Hello ${this.name_el.value}!`;
+
+    // this.el points to the root element
+    this.el.style.border = '2px dotted green';
+  }
+}
+
+BView.addView(Hello);
+</script>
+</div>
+
+    <div class="my-5">
+      <h2>Features</h2>
+      <ul>
+        <li>0 dependencies. jQuery or underscore.js.</li>
+        <li>Modern Browsers (including Microsoft Edge).</li>
+        <li>~200 lines of JavaScript class.</li>
+        <li class="mb-3">&OpenCurlyDoubleQuote;Read and understand the source in an afternoon&CloseCurlyDoubleQuote;, same as BackboneJS.</li>
+
+        <li>this.q(query_selector) and this.qAll(query_selector) similar to this.$el.find(query_selector).</li>
+        <li>Provides this.els similar to this.events to create predefined selector functions.</li>
+        <li>Auto view initializer. Just add data-view="YourViewClass".</li>
+        <li>Set BView.debug to true to enable debug messages.</li>
+      </ul>
+    </div>
+
+    <div class="my-2" style='text-shadow:none;'>
+      <h2>Setup BView in your project</h2>
+      <p>
+        BView class is exported as a module.
+        You can use the script tag as below,
+        or import it in your javascript file normally.
+        No compilation needed with type=module attribute.
+        You can also add it to package.json and build.
+      </p>
+<div data-view="SourceCode" data-result="false">
+<textarea class="html">
+<!-- For using directly in HTML -->
+
+<script type="module">
+  import BView from 'http://CDN/bview.js';
+
+  class ExampleView extends BView{
+    // ...
+  }
+
+  BView.addView(ExampleView);
+
+  // Add these below lines once anywhere in your code
+  BView.debug = true; // If you want debug
+  BView.start(); // Starts observer to instantiate views
+</script>
+
+
+
+</textarea>
+<script type="module">// For using in a js file
+
+// Import statement (can also import from CDN url)
+import BView from './bview.js';
+
+class ExampleView extends BView{
+  // ...
+}
+
+BView.addView(ExampleView);
+
+// Add these below lines once anywhere in your code
+// BView.debug = true; // If you want debug
+// BView.start(); // Starts observer to instantiate views
+
+
+
+
+</script>
+</div>
+
+    </div>
+
+    <div id="examples" class="my-5">
+      <h2 class="border-bottom py-4 my-4">Examples</h2>
+      <p>Here are some examples showing how BView can be used.</p>
+<h3 class="mb-3">Render Function</h3>
+<div data-view="SourceCode">
+<textarea class="html">
+<div data-view="RenderExample">
+  <form>
+    <input type='text' class='item' placeholder="Enter Item"/>
+    <button class='save'>Save</button>
+  </form>
+  <div class="list"></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</textarea>
+<script type="module">import BView from './bview.js';
+
+class RenderExample extends BView{
+  preinitialize(){
+    this.events = {
+      'submit form': 'save'
+    }
+
+    this.els = {
+      'item': '.item',
+      'list': '.list'
+    }
+
+    this.items = ['First item in the list'];
+  }
+
+  save(e){
+    e.preventDefault();
+
+    this.items.push(this.item_el.value);
+    this.item_el.value = '';
+    this.render();
+  }
+
+  // Use any templating system of your choice like underscore templates
+  render(){
+    this.list_el.innerHTML = `
+      <ol reversed>
+        ${
+          this.items.toReversed().map((item)=>(
+            `<li>${item}</li>`
+          )).join('')
+        }
+      </ol>
+    `;
+  }
+}
+
+BView.addView(RenderExample);
+</script>
+</div>
+
+<h3 class="mt-5 mb-3 pt-5 border-top">Multiple Instances</h3>
+<div data-view="SourceCode">
+<textarea class="html">
+<div data-view="CounterView"></div>
+<div data-view="CounterView"></div>
+<div data-view="CounterView"></div>
+<div data-view="CounterView"></div>
+<div data-view="CounterView"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</textarea>
+<script type="module">import BView from './bview.js';
+
+class CounterView extends BView{
+  preinitialize(){
+    this.events = {
+      'click .increment': 'increment',
+      'click .decrement': 'decrement'
+    }
+
+    this.els = {
+      'output': '.output'
+    }
+
+    this.value = 0;
+  }
+
+  increment(){
+    this.value++;
+    this.output_el.innerText = this.value;
+  }
+
+  decrement(){
+    this.value--;
+    this.output_el.innerText = this.value;
+  }
+
+  render(){
+    this.el.innerHTML = `
+      <p>
+        <button class="increment">Increment</button>
+        <button class="decrement">Decrement</button>
+        <span class="output">${this.value}</span>
+      </p>
+    `;
+  }
+}
+
+BView.addView(CounterView)
+</script>
+</div>
+
+
+
+<h3 class="mt-5 mb-3 pt-5 border-top">Passing Data</h3>
+<div data-view="SourceCode">
+<textarea class="html">
+<div data-view="CounterView2"></div>
+<div data-view="CounterView2"></div>
+<div data-view="CounterView2"></div>
+<div data-view="CounterView2"></div>
+<div data-view="CounterView2"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</textarea>
+<script type="module">import BView from './bview.js';
+
+class CounterView2 extends BView{
+  preinitialize(el){
+    this.el = el;
+
+    this.events = {
+      'click .increment': 'increment',
+      'click .decrement': 'decrement'
+    }
+
+    this.els = {
+      'output': '.output'
+    }
+
+    this.value = 0;
+  }
+
+  increment(e){
+    e.preventDefault();
+    this.value = this.value + Number(e.target.dataset.size || 1);
+    this.output_el.textContent = this.value;
+  }
+
+  decrement(e){
+    e.preventDefault();
+    this.value = this.value - Number(e.target.dataset.size || 1);
+    this.output_el.textContent = this.value;
+  }
+
+  render(){
+    this.el.innerHTML = `
+      <p>
+        <button class="increment">Increment</button>
+        <a href="#increment-by-2" class="increment" data-size="2" title="Increment by 2">Increment by 2</a>
+        <a href="#decrement-by-2" class="decrement" data-size="2" title="Decrement by 2">Decrement by 2</a>
+        <button class="decrement">Decrement</button>
+        <span class="output">${this.value}</span>
+      </p>
+    `;
+  }
+}
+
+BView.addView(CounterView2)
+</script>
+</div>
+
+
+    </div><!-- end of #examples -->
+  </div>
+</body>
+</html>

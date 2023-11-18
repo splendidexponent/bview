@@ -1,0 +1,26 @@
+{
+  "name": "@splendidexponent/bview",
+  "version": "0.1.0",
+  "description": "BView implements BackboneJS View",
+  "main": "dist/bview.cjs",
+  "scripts": {
+    "build": "npm run build-node && npm run build-web",
+    "build-node": "rollup bview.js --file dist/bview.cjs --format cjs",
+    "build-web": "rollup bview.js --file dist/bview.js --format iife --name BView --globals BView:BView",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/splendidexponent/bview.git"
+  },
+  "keywords": [
+    "backbone",
+    "backbonejs"
+  ],
+  "author": "splendidexponent",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/splendidexponent/bview/issues"
+  },
+  "homepage": "https://splendidexponent.github.io/bview"
+}
