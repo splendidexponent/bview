@@ -20,7 +20,7 @@
     class SourceCode extends BView{
       preinitialize(){
         this.el.innerHTML = `
-          <div class="row text-dark pt-2" style='text-shadow:none; background:#eee;'>
+          <div class="row text-dark pt-2 mx-0" style='text-shadow:none; background:#ccc;'>
             <div class="col-md-6">
               <h4>HTML</h4>
               <pre><code class="language-html">${_.escape(this.q('.html').value)}</code></pre>
@@ -34,7 +34,7 @@
             ${
               this.el.dataset.result != 'false' ?
               `
-                <div class="col-md-12 p-0 my-2">
+                <div class="col-md-12 my-2">
                   <h4>Result</h4>
                   <div class='p-5 bg-white text-black'>
                     ${this.q('.html').value}
@@ -46,7 +46,8 @@
           </div>
         `;
 
-        hljs.highlightAll();
+        hljs.highlightElement(this.qAll('code')[0]);
+        hljs.highlightElement(this.qAll('code')[1]);
       }
     }
 
@@ -120,17 +121,28 @@ BView.addView(Hello);
 
     <div class="my-5">
       <h2>Features</h2>
-      <ul>
+      <ol>
         <li>0 dependencies. jQuery or underscore.js.</li>
         <li>Modern Browsers (including Microsoft Edge).</li>
-        <li>~200 lines of JavaScript class.</li>
+        <li>Auto view initializer. Just add data-view="YourViewClass".</li>
+        <li>~200 lines of ES6 JavaScript class.</li>
         <li class="mb-3">&OpenCurlyDoubleQuote;Read and understand the source in an afternoon&CloseCurlyDoubleQuote;, same as BackboneJS.</li>
 
-        <li>this.q(query_selector) and this.qAll(query_selector) similar to this.$el.find(query_selector).</li>
-        <li>Provides this.els similar to this.events to create predefined selector functions.</li>
-        <li>Auto view initializer. Just add data-view="YourViewClass".</li>
-        <li>Set BView.debug to true to enable debug messages.</li>
-      </ul>
+        
+      </ol>
+    </div>
+
+    <div class="my-2 mb-5" style='text-shadow:none;'>
+      <h2>FAQ</h2>
+      
+      <h4>Select elements within el</h4>
+      <p>this.q(query_selector) and this.qAll(query_selector) similar to this.$el.find(query_selector).</p>
+      
+      <h4>Predefined selectors</h4>
+      <p>Provides this.els similar to this.events to create predefined selector functions.</p>
+      
+      <h4>Debug</h4>
+      <p>Set BView.debug to true to enable debug messages.</p>
     </div>
 
     <div class="my-2" style='text-shadow:none;'>
@@ -144,26 +156,21 @@ BView.addView(Hello);
       </p>
 <div data-view="SourceCode" data-result="false">
 <textarea class="html">
-<!-- For using directly in HTML -->
+<!-- Direct include using CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@splendidexponent/bview@0.1.0/dist/bview.js"></script>
 
-<script type="module">
-  import BView from 'http://CDN/bview.js';
-
-  class ExampleView extends BView{
-    // ...
-  }
-
-  BView.addView(ExampleView);
-
-  // Add these below lines once anywhere in your code
+<script>
+  // Add these lines once anywhere in your code
   BView.debug = true; // If you want debug
   BView.start(); // Starts observer to instantiate views
 </script>
 </textarea>
-<script type="module">// For using in a js file
-
-// Import statement (can also import from CDN url)
-import BView from './bview.js';
+<script type="text/template">//
+// npm install @splendidexponent/bview
+//
+// const BView = require('bview');
+// or 
+// import BView from "bview/bview";
 
 class ExampleView extends BView{
   // ...
@@ -171,7 +178,7 @@ class ExampleView extends BView{
 
 BView.addView(ExampleView);
 
-// Add these below lines once anywhere in your code
+// Add these lines once anywhere in your code
 // BView.debug = true; // If you want debug
 // BView.start(); // Starts observer to instantiate views
 </script>
@@ -181,7 +188,6 @@ BView.addView(ExampleView);
 
     <div id="examples" class="my-5">
       <h2 class="border-bottom py-4 my-4">Examples</h2>
-      <p>Here are some examples showing how BView can be used.</p>
 <h3 class="mb-3">Render Function</h3>
 <div data-view="SourceCode">
 <textarea class="html">
@@ -328,9 +334,9 @@ class CounterView2 extends BView{
     this.el.innerHTML = `
       <p>
         <button class="increment">Increment</button>
+        <button class="decrement">Decrement</button>
         <a href="#increment-by-2" class="increment" data-size="2" title="Increment by 2">Increment by 2</a>
         <a href="#decrement-by-2" class="decrement" data-size="2" title="Decrement by 2">Decrement by 2</a>
-        <button class="decrement">Decrement</button>
         <span class="output">${this.value}</span>
       </p>
     `;
@@ -396,7 +402,9 @@ BView.addView(ViewInView);
 <div data-view="SourceCode">
 <textarea class="html">
 <!-- Move your mouse around to draw -->
-<canvas data-view="Paint" width="500" height="500" style="border:1px solid #000;"></canvas>
+<!-- On mobile tap to draw -->
+
+<canvas data-view="Paint" width="280" height="500" style="border:3px solid #000;"></canvas>
 </textarea>
 <script type="module">import BView from './bview.js';
 
@@ -407,6 +415,7 @@ class Paint extends BView{
     };
 
     this.drawing_context = this.el.getContext("2d");
+    this.drawing_context.strokeStyle = '#0000FF';
 
     this.prev_x = 0;
     this.prev_y = 0;
