@@ -18,7 +18,7 @@
     BView.start();
 
     class SourceCode extends BView{
-      preinitialize(){
+      initialize(){
         this.el.innerHTML = `
           <div class="row text-dark pt-2 mx-0" style='text-shadow:none; background:#ccc;'>
             <div class="col-md-6">
@@ -51,7 +51,7 @@
       }
     }
 
-    BView.addView(SourceCode);
+    BView.addViewClass(SourceCode);
   </script>
 </head>
 <body class="d-flex h-100 text-bg-dark" style="background-color: #093b59 !important;">
@@ -67,9 +67,9 @@
     </header>
   
     <main class="px-3 text-center" style="margin:200px 0;">
-      <h1 class="mb-3">A <a href="https://backbonejs.org/#View" class="text-white">BackboneJS View</a> implementation</h1>
+      <h1 class="mb-3">A <a href="https://backbonejs.org/#View" class="text-white">Backbone.js View</a> implementation</h1>
       <p class="lead">
-        BView implements BackboneJS View, and nothing else.
+        BView implements Backbone.js View, and nothing else.
         <br/>
         One <em>JavaScript class</em> scopes to one <span class="text-secondary">(or many)</span> <em>HTML element</em>.
       </p>
@@ -84,14 +84,13 @@
     <input type="text" class="name" placeholder="Enter Name" />
     <button>Go</button>
   </form>
-  <div class="message">
-  </div>
+  <div class="message"></div>
 </div>
 </textarea>
 <script type="module">import BView from "./bview.js";
 
 class Hello extends BView{
-  preinitialize(){
+  initialize(){
     // Define events within el
     this.events = {
       'submit form': 'sayHi'
@@ -115,7 +114,8 @@ class Hello extends BView{
   }
 }
 
-BView.addView(Hello);
+// Add your ViewClass to BView, to instantiate automatically
+BView.addViewClass(Hello);
 </script>
 </div>
 
@@ -126,7 +126,7 @@ BView.addView(Hello);
         <li>Modern Browsers (including Microsoft Edge).</li>
         <li>Auto view initializer. Just add data-view="YourViewClass".</li>
         <li>~200 lines of ES6 JavaScript class.</li>
-        <li class="mb-3">&OpenCurlyDoubleQuote;Read and understand the source in an afternoon&CloseCurlyDoubleQuote;, same as BackboneJS.</li>
+        <li class="mb-3">&OpenCurlyDoubleQuote;Read and understand the source in an afternoon&CloseCurlyDoubleQuote;, same as Backbone.js.</li>
 
         
       </ol>
@@ -136,7 +136,7 @@ BView.addView(Hello);
       <h2>FAQ</h2>
       
       <h4>Select elements within el</h4>
-      <p>this.q(query_selector) and this.qAll(query_selector) similar to this.$el.find(query_selector).</p>
+      <p>this.q(query_selector) and this.qAll(query_selector), similar to this.$el.find(query_selector).</p>
       
       <h4>Predefined selectors</h4>
       <p>Provides this.els similar to this.events to create predefined selector functions.</p>
@@ -147,17 +147,10 @@ BView.addView(Hello);
 
     <div class="my-2" style='text-shadow:none;'>
       <h2>Setup BView in your project</h2>
-      <p>
-        BView class is exported as a module.
-        You can use the script tag as below,
-        or import it in your javascript file normally.
-        No compilation needed with type=module attribute.
-        You can also add it to package.json and build.
-      </p>
 <div data-view="SourceCode" data-result="false">
 <textarea class="html">
 <!-- Direct include using CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@splendidexponent/bview@0.1.0/dist/bview.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@splendidexponent/bview@0.1.1/dist/bview.js"></script>
 
 <script>
   // Add these lines once anywhere in your code
@@ -168,15 +161,15 @@ BView.addView(Hello);
 <script type="text/template">//
 // npm install @splendidexponent/bview
 //
-// const BView = require('bview');
+// const BView = require('@splendidexponent/bview/dist/bview.cjs');
 // or 
-// import BView from "bview/bview";
+// import BView from "@splendidexponent/bview";
 
 class ExampleView extends BView{
   // ...
 }
 
-BView.addView(ExampleView);
+BView.addViewClass(ExampleView);
 
 // Add these lines once anywhere in your code
 // BView.debug = true; // If you want debug
@@ -202,7 +195,7 @@ BView.addView(ExampleView);
 <script type="module">import BView from './bview.js';
 
 class RenderExample extends BView{
-  preinitialize(){
+  initialize(){
     this.events = {
       'submit form': 'save'
     }
@@ -237,7 +230,7 @@ class RenderExample extends BView{
   }
 }
 
-BView.addView(RenderExample);
+BView.addViewClass(RenderExample);
 </script>
 </div>
 
@@ -253,7 +246,7 @@ BView.addView(RenderExample);
 <script type="module">import BView from './bview.js';
 
 class CounterView extends BView{
-  preinitialize(){
+  initialize(){
     this.events = {
       'click .increment': 'increment',
       'click .decrement': 'decrement'
@@ -278,7 +271,7 @@ class CounterView extends BView{
 
   render(){
     this.el.innerHTML = `
-      <div>
+      <div class='mt-3'>
         <button class="increment">Increment</button>
         <button class="decrement">Decrement</button>
         <span class="output">${this.value}</span>
@@ -287,25 +280,25 @@ class CounterView extends BView{
   }
 }
 
-BView.addView(CounterView)
+BView.addViewClass(CounterView)
 </script>
 </div>
 
 
 
-<h3 class="mt-5 mb-3 pt-5 border-top">Passing Data</h3>
+<h3 class="mt-5 mb-3 pt-5 border-top">Passing arguments to View</h3>
 <div data-view="SourceCode">
 <textarea class="html">
-<div data-view="CounterView2"></div>
-<div data-view="CounterView2"></div>
-<div data-view="CounterView2"></div>
-<div data-view="CounterView2"></div>
-<div data-view="CounterView2"></div>
+<div data-view="CounterView2" data-start="1"></div>
+<div data-view="CounterView2" data-start="2"></div>
+<div data-view="CounterView2" data-start="3"></div>
+<div data-view="CounterView2" data-start="4"></div>
+<div data-view="CounterView2" data-start="5"></div>
 </textarea>
 <script type="module">import BView from './bview.js';
 
 class CounterView2 extends BView{
-  preinitialize(){
+  initialize(){
     this.events = {
       'click .increment': 'increment',
       'click .decrement': 'decrement'
@@ -315,7 +308,7 @@ class CounterView2 extends BView{
       'output': '.output'
     }
 
-    this.value = 0;
+    this.value = Number(this.el.dataset.start);
   }
 
   increment(e){
@@ -343,7 +336,7 @@ class CounterView2 extends BView{
   }
 }
 
-BView.addView(CounterView2)
+BView.addViewClass(CounterView2)
 </script>
 </div>
 
@@ -367,7 +360,7 @@ BView.addView(CounterView2)
 <script type="module">import BView from './bview.js';
 
 class ViewInView extends BView{
-  preinitialize(){
+  initialize(){
     this.events = {
       'click a[href="#add"]': 'addCounter',
       'click a[href="#remove"]': 'removeCounter',
@@ -381,7 +374,6 @@ class ViewInView extends BView{
     div.innerHTML = `
       <div data-view='CounterView'></div>
       <a href='#remove'>Remove</a>
-      <br/><br/>
     `;
     this.el.appendChild(div);
   }
@@ -393,7 +385,7 @@ class ViewInView extends BView{
   }
 }
 
-BView.addView(ViewInView);
+BView.addViewClass(ViewInView);
 </script>
 </div>
 
@@ -401,15 +393,17 @@ BView.addView(ViewInView);
 <h3 class="mt-5 mb-3 pt-5 border-top">Paint</h3>
 <div data-view="SourceCode">
 <textarea class="html">
-<!-- Move your mouse around to draw -->
-<!-- On mobile tap to draw -->
+<p>
+  Move your mouse around to draw.<br/>
+  On mobile tap to draw
+</p>
 
 <canvas data-view="Paint" width="280" height="500" style="border:3px solid #000;"></canvas>
 </textarea>
 <script type="module">import BView from './bview.js';
 
 class Paint extends BView{
-  preinitialize(){
+  initialize(){
     this.events = {
       'mousemove': 'onMouseMove'
     };
@@ -432,12 +426,22 @@ class Paint extends BView{
   }
 }
 
-BView.addView(Paint);
+BView.addViewClass(Paint);
 </script>
 </div>
 
 
     </div><!-- end of #examples -->
-  </div>
+  
+  
+  <footer class="text-white border-top text-center py-5">
+    <p>
+      <a class="text-white" href="https://github.com/splendidexponent/bview/blob/main/bview.js">
+        View Source on GitHub
+      </a>
+    </p>
+  </footer>
+  
+  </div><!-- end of container -->
 </body>
 </html>

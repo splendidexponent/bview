@@ -2,7 +2,7 @@ var BView = (function () {
   'use strict';
 
   /*!
-    BView v0.1.0
+    BView v0.1.1
     (c) 2023 github.com/splendidexponent
     License: MIT
    */
@@ -10,8 +10,8 @@ var BView = (function () {
     constructor(el){
       this.el = el;
 
-      // https://backbonejs.org/#View-preinitialize
-      this.preinitialize(el);
+      // https://backbonejs.org/#View-constructor
+      this.initialize(el);
 
       if(BView.debug){
         console.log(this.constructor.name, 'instantiated el:', this.el);
@@ -132,7 +132,7 @@ var BView = (function () {
       return false;
     }
 
-    preinitialize(){
+    initialize(){
       // default no-op
     }
 
@@ -146,7 +146,7 @@ var BView = (function () {
     static viewClasses = {};
     static viewInstances = [];
 
-    static addView(viewClass){
+    static addViewClass(viewClass){
       this.viewClasses[viewClass.name] = viewClass;
 
       if(BView.debug){
@@ -164,10 +164,12 @@ var BView = (function () {
       els.forEach((el)=>{
         if(!this.viewClasses[el.dataset.view]) return;
 
+        const instance = new this.viewClasses[el.dataset.view](el);
         el.dataset.viewInitialized = 'true';
+
         this.viewInstances.push({
-          el: el,
-          instance: new this.viewClasses[el.dataset.view](el)
+          instance: instance,
+          el: el
         });
       });
 

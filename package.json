@@ -1,12 +1,13 @@
 {
   "name": "@splendidexponent/bview",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "BView implements BackboneJS View",
-  "main": "dist/bview.cjs",
+  "main": "bview.js",
   "scripts": {
     "build": "npm run build-node && npm run build-web",
     "build-node": "rollup bview.js --file dist/bview.cjs --format cjs",
     "build-web": "rollup bview.js --file dist/bview.js --format iife --name BView --globals BView:BView",
+    "dev": "php -S 0.0.0.0:8000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -1,7 +1,7 @@
 'use strict';
 
 /*!
-  BView v0.1.0
+  BView v0.1.1
   (c) 2023 github.com/splendidexponent
   License: MIT
  */
@@ -9,8 +9,8 @@ class BView {
   constructor(el){
     this.el = el;
 
-    // https://backbonejs.org/#View-preinitialize
-    this.preinitialize(el);
+    // https://backbonejs.org/#View-constructor
+    this.initialize(el);
 
     if(BView.debug){
       console.log(this.constructor.name, 'instantiated el:', this.el);
@@ -131,7 +131,7 @@ class BView {
     return false;
   }
 
-  preinitialize(){
+  initialize(){
     // default no-op
   }
 
@@ -145,7 +145,7 @@ class BView {
   static viewClasses = {};
   static viewInstances = [];
 
-  static addView(viewClass){
+  static addViewClass(viewClass){
     this.viewClasses[viewClass.name] = viewClass;
 
     if(BView.debug){
@@ -163,10 +163,12 @@ class BView {
     els.forEach((el)=>{
       if(!this.viewClasses[el.dataset.view]) return;
 
+      const instance = new this.viewClasses[el.dataset.view](el);
       el.dataset.viewInitialized = 'true';
+
       this.viewInstances.push({
-        el: el,
-        instance: new this.viewClasses[el.dataset.view](el)
+        instance: instance,
+        el: el
       });
     });
 
