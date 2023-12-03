@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BView</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PF3EZ974MM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-PF3EZ974MM');
+  </script>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/twbs/bootstrap@gh-pages/docs/5.3/examples/cover/cover.css">
 
@@ -355,6 +366,11 @@ BView.addViewClass(CounterView2)
     <br/>
     Check in console for debug logs.
   </p>
+
+  <div>
+    <div data-view='CounterView'></div>
+    <a href='#remove'>Remove</a>
+  </div>
 </div>
 </textarea>
 <script type="module">import BView from './bview.js';
@@ -395,7 +411,7 @@ BView.addViewClass(ViewInView);
 <textarea class="html">
 <p>
   Move your mouse around to draw.<br/>
-  On mobile tap to draw
+  On mobile tap to draw.
 </p>
 
 <canvas data-view="Paint" width="280" height="500" style="border:3px solid #000;"></canvas>
